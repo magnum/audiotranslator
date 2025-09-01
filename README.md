@@ -14,4 +14,8 @@ Ogni utente deve avere un progetto su Google Cloud Console con le API di Speech-
 
 ### Dipendenze
 #### Installare le Dipendenze:
-L'utente deve installare tutte le dipendenze richieste dal progetto, incluse le librerie Python necessarie (Flask, pydub, google-cloud-speech, google-cloud-translate, google-cloud-texttospeech, flask-cors) e FFmpeg.
+L'utente deve installare tutte le dipendenze richieste dal progetto, incluse le librerie Python necessarie (Flask, pydub, google-cloud-speech, google-cloud-translate, google-cloud-texttospeech, flask-cors) e FFmpeg.  
+Per installere dipendenze eseguire
+```
+pip install -r requirements.txt
+```

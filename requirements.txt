@@ -1,0 +1,21 @@
+# Flask web framework and extensions
+Flask==3.1.2
+Flask-CORS==6.0.1
+
+# Audio processing
+pydub==0.25.1
+
+# Google Cloud services
+google-cloud-speech==2.33.0
+google-cloud-translate==3.21.1
+google-cloud-texttospeech==2.27.0
+google-cloud-core==2.4.3
+
+# Google API dependencies
+google-api-core==1.34.1
+google-auth==2.40.3
+google-auth-httplib2==0.2.0
+googleapis-common-protos==1.70.0
+
+# Additional dependencies
+grpc-google-iam-v1==0.14.2
