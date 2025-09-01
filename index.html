@@ -12,13 +12,11 @@
         <div class="bg-white shadow-xl rounded-lg py-3">
             <div class="p-2">
                 <h2 class="text-2xl font-bold text-center mb-4">Traduttore Audio</h2>
+                <div class="max-w-xl mx-auto mb-4">
+                    <button id="startRecording" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Inizia Registrazione</button>
+                    <button id="stopRecording" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Ferma Registrazione</button>
+                </div>
                 <form id="audioForm" class="max-w-xl mx-auto">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="audioFile">
-                            Carica File Audio
-                        </label>
-                        <input type="file" id="audioFile" name="audio" accept="audio/*" class="shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="sourceLanguage">
                             Lingua d'Origine
@@ -32,7 +30,7 @@
                         <input type="text" id="targetLanguage" name="target_language" value="en-US" placeholder="es: it-IT" class="shadow border rounded py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline">
                     </div>
                     <div class="flex items-center justify-between">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Traduci
                         </button>
                     </div>
@@ -42,12 +40,36 @@
     </div>
 
     <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        var formData = new FormData();
+        document.getElementById('startRecording').addEventListener('click', function() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+                mediaRecorder.onstop = () => {
+                    console.log("dio cane")
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    formData.append('audio', audioBlob);
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    audioChunks = [];
+                };
+                mediaRecorder.start();
+            });
+        });
+    
+        document.getElementById('stopRecording').addEventListener('click', function() {
+            mediaRecorder.stop();
+        });
+    
         // Script per gestire la richiesta al backend
         document.getElementById('audioForm').addEventListener('submit', function(e) {
             e.preventDefault();
         
-            var formData = new FormData();
-            formData.append('audio', document.getElementById('audioFile').files[0]);
+            
             formData.append('source_language', document.getElementById('sourceLanguage').value);
             formData.append('target_language', document.getElementById('targetLanguage').value);
         
